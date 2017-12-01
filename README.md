@@ -13,15 +13,13 @@
 
 ## Documentation
 
-###Lenovo CNOS Restapi Module:
-
 Performs restapi operations from a remote server on devices running Lenovo CNOS.
 
-####Synopsis
+###Synopsis
 This module performs restapi operations on a device running CNOS. The Restapi operations retrive, modify and creates resources on the CNOS device. 
 It provides a way to manage CNOS devices remotely from server.
 
-####Options
+### Options
 
 parameter | required | default | choices      | Description
 :------:  | :------: | :------:| :------:     | :------:
@@ -34,7 +32,7 @@ urlpath   |  yes     |  null   |   []         | URL Path of the RESTAPI
 method    |  yes     |  null   |[GET,PUT,POST]| The HTTP method of the request.  GET is typically used for querying objects. POST is typically used for creating/querying objects. PUT is typically used for modifying objects
 jsoninp   |  yes     |  null   |   []         | Input json dictionary. Used by POST, PUT method to input request paramters
 
-####Examples
+### Examples
 The following are examples of using the module cnos_restapi. These are written in the main.yml file of the tasks directory. 
 ```sh
 - name: Configure BST feature using a JSON string
@@ -74,7 +72,7 @@ The following are examples of using the module cnos_restapi. These are written i
 
 ```
 
-####Return Values
+### Return Values
 On successful execution, the method returns an string with the following message in JSON format: 
 "RESTAPI [GET,PUT,POST]  urlpath is successful"
 Upon any failure, the method returns an error display string. 
