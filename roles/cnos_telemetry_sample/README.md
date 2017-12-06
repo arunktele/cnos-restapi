@@ -126,7 +126,7 @@ Variable | values | Description
 --- | --- | --- 
 request-type | "top-drops" : Ports suffering maximum congestion in the switch and the associated drop counters, “top-port-queue-drops” : Top port-queue level drop-counters in the switch, “port-drops” : Per-port total drop counters,  “port-queue-drops” : Port-queue level drop-counters | Indicates the specific set of drop counters being requested
 collection-interval | 0, 10 - 3600 | Determines the period with which the congestion drop counters are collected from the ASIC and reported to the client
-request-param | count : Number of records required in the report, ifname-list : List of interface names, queue-type : Type of queue requested,  Queue-list : List of the queue ids | Request Parameters for the congestion drop counters
+request-param | Consists of count, ifname-list, queue-type, queue-list| Request Parameters for the congestion drop counters
 
 The request-param is a dictionary of  the following
 Variable | values | Description 
