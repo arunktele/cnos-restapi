@@ -107,10 +107,14 @@ device| | |	Threshold
 The permitted values for the indexs are given below
 Index | Values | Description
 --- | --- | ---
-rqe-threshold, cpu-threshold, um-threshold, uc-threshold, mc-threshold | 1-100 | Threshold values in percentages
+rqe-threshold | 1-100 | Threshold values in percentages
+cpu-threshold | 1-100 |  Threshold values in percentages
+um-threshold | 1-100 |  Threshold values in percentages
+uc-threshold | 1-100 |  Threshold values in percentages
+mc-threshold | 1-100 | Threshold values in percentages
 queue | integer | the queue  number with respect to the realm
 service-pool | integer(0-1) | Service pool
-priority-group | integer (0-7 ) Priority group
+priority-group | integer (0-7 ) | Priority group
 interface | string | Physical port interface of the device
  
 #### jsoninp parameters for the /nos/api/info/telemetry/bst/congestion-drop-counters restapi
