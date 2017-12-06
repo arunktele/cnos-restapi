@@ -1,0 +1,9 @@
+---
+cnos_tlm_bst_feature_data1:
+  - { urlpath: /nos/api/cfg/telemetry/bst/feature, method: GET}
+
+cnos_tlm_bst_feature_data:
+  - { urlpath: /nos/api/cfg/telemetry/bst/feature, method: PUT, jsoninp: '{"collection-interval": 20, "send-async-reports": 1, "send-snapshot-on-trigger": 1, "trigger-rate-limit": 1, "async-full-report": 0, "trigger-rate-limit-interval": 11, "bst-enable": 1}'}
+
+cnos_tlm_bst_cgsn_data:
+  - { urlpath: /nos/api/info/telemetry/bst/congestion-drop-counters, method: POST, jsoninp: '{"req-id" : 1, "request-type" : "port-drops", "request-params": {"interface-list": ["Ethernet1/1", "Ethernet1/2", "Ethernet1/3"]}}'}

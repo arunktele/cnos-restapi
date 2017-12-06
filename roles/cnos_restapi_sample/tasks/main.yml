@@ -1,0 +1,13 @@
+# This contain sample template execution task
+---
+- name: Test PUT BST feature
+  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'
+  with_items: "{{cnos_tlm_bst_feature_data}}"
+
+- name: Test GET BST feature
+  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  urlpath='{{item.urlpath}}' method='{{item.method}}'
+  with_items: "{{cnos_tlm_bst_feature_data1}}"
+
+- name: Test POST BST Cgsn
+  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'
+  with_items: "{{cnos_tlm_bst_cgsn_data}}"

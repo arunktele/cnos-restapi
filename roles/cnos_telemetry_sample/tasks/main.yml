@@ -1,0 +1,16 @@
+---
+- name: Replace Config CLI command template with values
+  template: src=./template/cnos_tlm_common_template.j2 dest=./commands/cnos_tlm_{{ inventory_hostname }}_commands.txt
+  with_items: "{{cnos_tlm_common_template_data}}"
+
+- name: Applying CLI commands on Switches
+  cnos_template: host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} deviceType={{ hostvars[inventory_hostname]['deviceType']}} commandfile=./commands/cnos_tlm_{{ inventory_hostname }}_commands.txt outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt
+  with_items: "{{cnos_tlm_common_template_data}}"
+
+- name: PUT BST feature
+  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  transport='{{item.transport}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'
+  with_items: "{{cnos_tlm_bst_feature_data}}"
+
+- name: PUT BST tracking
+  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  transport='{{item.transport}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'
+  with_items: "{{cnos_tlm_bst_tk_data}}"

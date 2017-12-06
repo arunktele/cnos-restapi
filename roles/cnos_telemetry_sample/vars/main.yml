@@ -1,0 +1,7 @@
+---
+cnos_tlm_common_template_data:
+  - {controllerip: 10.240.177.235, controllerport: 8085, vrf: management, hbinterval: 45}
+cnos_tlm_bst_feature_data:
+  - { use_ssl: True, urlpath: /nos/api/cfg/telemetry/bst/feature, method: PUT, jsoninp: '{"bst-enable" : 1, "send-async-reports": 1,"trigger-rate-limit": 1, "trigger-rate-limit-interval": 10, "send-snapshot-on-trigger": 0, "collection-interval": 20, "async-full-report": 1}'}
+cnos_tlm_bst_tk_data:
+  - { use_ssl: True, urlpath: /nos/api/cfg/telemetry/bst/tracking, method: PUT, jsoninp: '{"track-egress-port-service-pool": 1,"track-egress-uc-queue": 1, "track-egress-rqe-queue": 1, "track-egress-cpu-queue": 1,"track-ingress-port-service-pool":1, "track-ingress-service-pool": 1, "track-egress-mc-queue": 1,"track-peak-stats": 0, "track-ingress-port-priority-group": 1,"track-egress-service-pool": 1, "track-device": 1}'}
