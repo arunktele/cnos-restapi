@@ -109,14 +109,8 @@ The script is executed using the python.
   
   Report Type | Description
   --- | ---
-  Predictive Congestion Report | This selection sets thresholds on certain realms. On hitting the configured threshold, the switch sends reports to the controller. 
-      a) Trigger Rate Interval 
-         This is the interval when these threshold reports are sent to the controller from the switch.
-      b) Realm and thier thresholds 
-         This is realms that use choose to configure the threshold. The script request user to enter the indexes and the threshold 
-         values for the configured realm.
- Congestion_Detection | This selection configures congestion detection reports periodically. There are four types of congestion reports supported
-        a) top-drops
+  Predictive Congestion Report | This selection sets thresholds on certain realms. On reaching the configured threshold, the switch sends reports to the controller. *Trigger Rate Interval* is the interval when these threshold reports are sent to the controller from the switch. *realm* is the realm that use choose to configure the threshold. The script request user to enter the indexes and the threshold values for the configured realm.
+ Congestion_Detection | This selection configures congestion detection reports periodically. There are four types of congestion reports supported a) top-drops
            Enter this selection to get the ports experiencing maximum congestion.
            The number of ports and the periodicity of the report is further required as input.
         b) port-drops
