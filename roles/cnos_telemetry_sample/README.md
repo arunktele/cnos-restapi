@@ -47,15 +47,15 @@ Variable | Description
 `urlpath` | Specifies the url path of the restapi
 `use_ssl` | Specifies the transport layer used by the RESTAPI. False choice indicates http plaintext communication over port 8090. True indicates https secured encrypted comminication
 `method` | The HTTP method of the restapi request. 
-`jsoninp` | Input json dictionary. Used by POST, PUT method to input request paramters.
+`jsoninp` | Input json dictionary. Used by POST, PUT method to input request paramters
 
 The restapis  and thier corresponding paramaters used by the cnos_telemetry role is given below.
 urlpath | method |  Description
 ---  |  --- | --- 
-/nos/api/cfg/telemetry/bst/feature | PUT | configures  the bst feature for the telemetry report
-/nos/api/cfg/telemetry/bst/tracking | PUT | configures the tracking on or off  on the bst realms
-/nos/api/cfg/telemetry/bst/threshold | PUT | configures the bst threshold for a bst realm 
-/nos/api/info/telemetry/bst/congestion-drop-counters | POST | configure BST congestion drop counters report
+`/nos/api/cfg/telemetry/bst/feature` | PUT | configures  the bst feature for the telemetry report
+`/nos/api/cfg/telemetry/bst/tracking` | PUT | configures the tracking on or off  on the bst realms
+`/nos/api/cfg/telemetry/bst/threshold` | PUT | configures the bst threshold for a bst realm 
+`/nos/api/info/telemetry/bst/congestion-drop-counters` | POST | configure BST congestion drop counters report
 
 
 #### jsoninp parameter for the /nos/api/cfg/telemetry/bst/feature  restapi
