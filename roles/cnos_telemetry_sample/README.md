@@ -40,25 +40,26 @@ The syntax of *main.yml* file for variables is the following:
 
 You will need to replace the `<value>` field with the value that suits your topology. The `<template variable>` fields are taken from the template and it is recommended that you leave them unchanged.
 
-###Variables for cnos_restapi in context of cnos telemetry configuration
+### Variables for cnos_restapi in context of cnos telemetry configuration
 
 Variable | Description
 --- | ---
 `urlpath` | Specifies the url path of the restapi
 `use_ssl` | Specifies the transport layer used by the RESTAPI. False choice indicates http plaintext communication over port 8090. True indicates https secured encrypted comminication
 `method` | The HTTP method of the restapi request. 
-`jsoninp` | Input json dictionary. Used by POST, PUT method to input request paramters.
+`jsoninp` | Input json dictionary. Used by POST, PUT method to input request paramters
 
 The restapis  and thier corresponding paramaters used by the cnos_telemetry role is given below.
+
 urlpath | method |  Description
 ---  |  --- | --- 
-/nos/api/cfg/telemetry/bst/feature | PUT | configures  the bst feature for the telemetry report
-/nos/api/cfg/telemetry/bst/tracking | PUT | configures the tracking on or off  on the bst realms
-/nos/api/cfg/telemetry/bst/threshold | PUT | configures the bst threshold for a bst realm 
-/nos/api/info/telemetry/bst/congestion-drop-counters | POST | configure BST congestion drop counters report
+`/nos/api/cfg/telemetry/bst/feature` | PUT | configures  the bst feature for the telemetry report
+`/nos/api/cfg/telemetry/bst/tracking` | PUT | configures the tracking on or off  on the bst realms
+`/nos/api/cfg/telemetry/bst/threshold` | PUT | configures the bst threshold for a bst realm 
+`/nos/api/info/telemetry/bst/congestion-drop-counters` | POST | configure BST congestion drop counters report
 
 
-####jsoninp parameter for the /nos/api/cfg/telemetry/bst/feature  restapi
+#### jsoninp parameter for the /nos/api/cfg/telemetry/bst/feature  restapi
 Variable | values | Description
 --- | --- | ---
 bst-enable | 1: Enable BST feature, 0: Disable BST feature | Determines if the BST feature should be active or not  
@@ -69,7 +70,7 @@ trigger-rate-limit-interval | 0, 10-600 | interval during which the number of tr
 send-snapshot-on-trigger | 1: trigger-report contains buffer statistics for all configured realms 0: trigger-report contains buffer statistics  only for the statistic/ counter for which the trigger was raised.|  Determines whether the Agent should send a complete buffer statistics report for all configured realms to the collector
 async-full-report | 1: enable full report, 0: disable full report | BST feature asynchronously sends full BST reports to the collector
 
-####jsoninp parameters for the /nos/api/cfg/telemetry/bst/tracking restapi
+#### jsoninp parameters for the /nos/api/cfg/telemetry/bst/tracking restapi
 Variable | values | Description 
 --- | --- | ---
 track-egress-port-service-pool | 0: Disable Tracking, 1: Enable Tracking | Tracks egress per-port and per-service pool buffers
@@ -84,7 +85,7 @@ track-ingress-port-priority-group | 0: Disable Tracking, 1: Enable Tracking | Tr
 track-egress-service-pool | 0: Disable Tracking, 1: Enable Tracking | Tracks per egress service pool buffers
 track-device | 0: Disable Tracking, 1: Enable Tracking | Tracks per device buffers
 
-####jsoninp parameter for the /nos/api/cfg/telemetry/bst/threshold restapi
+#### jsoninp parameter for the /nos/api/cfg/telemetry/bst/threshold restapi
 
 The jsoninp comprises od realm, index1/index1 and index2, threshold parameter.
 
@@ -104,24 +105,31 @@ egress-uc-queue	 | queue | | uc-threshold
 device| | |	Threshold
 
 The permitted values for the indexs are given below
+
 Index | Values | Description
 --- | --- | ---
-rqe-threshold, cpu-threshold, um-threshold, uc-threshold, mc-threshold | 1-100 | Threshold values in percentages
+rqe-threshold | 1-100 | Threshold values in percentages
+cpu-threshold | 1-100 |  Threshold values in percentages
+um-threshold | 1-100 |  Threshold values in percentages
+uc-threshold | 1-100 |  Threshold values in percentages
+mc-threshold | 1-100 | Threshold values in percentages
 queue | integer | the queue  number with respect to the realm
 service-pool | integer(0-1) | Service pool
-priority-group | integer (0-7 ) Priority group
+priority-group | integer (0-7 ) | Priority group
 interface | string | Physical port interface of the device
  
-####jsoninp parameters for the /nos/api/info/telemetry/bst/congestion-drop-counters restapi
+#### jsoninp parameters for the /nos/api/info/telemetry/bst/congestion-drop-counters restapi
 
 The elements of the jsoninp consist of request-type, collection-interval and request-param
+
 Variable | values | Description 
---- | --- | ---
+--- | --- | --- 
 request-type | "top-drops" : Ports suffering maximum congestion in the switch and the associated drop counters, “top-port-queue-drops” : Top port-queue level drop-counters in the switch, “port-drops” : Per-port total drop counters,  “port-queue-drops” : Port-queue level drop-counters | Indicates the specific set of drop counters being requested
 collection-interval | 0, 10 - 3600 | Determines the period with which the congestion drop counters are collected from the ASIC and reported to the client
-request-param | count : Number of records required in the report, ifname-list : List of interface names, queue-type : Type of queue requested,  Queue-list : List of the queue ids | Request Parameters for the congestion drop counters
+request-param | Consists of count, ifname-list, queue-type, queue-list| Request Parameters for the congestion drop counters
 
 The request-param is a dictionary of  the following
+
 Variable | values | Description 
 --- | --- | ---
 count |  integer | Number of records requested
@@ -129,7 +137,7 @@ ifname-list | list | List of interfaces
 queue-type | 'ucast': unicast queue, 'mcast': multicast queue, 'all' : Both unicast and multicast queue
 queue-list | list of queues | list of queue ids
 
-###The cnos_template used by the cnos_telemetry role is given below
+### cnos_template used by the cnos_telemetry role
 
 The following is the contents of the common telemetry template
 feature telemetry
