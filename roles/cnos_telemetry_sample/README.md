@@ -129,6 +129,7 @@ collection-interval | 0, 10 - 3600 | Determines the period with which the conges
 request-param | Consists of count, ifname-list, queue-type, queue-list| Request Parameters for the congestion drop counters
 
 The request-param is a dictionary of  the following
+
 Variable | values | Description 
 --- | --- | ---
 count |  integer | Number of records requested
