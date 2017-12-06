@@ -50,6 +50,7 @@ Variable | Description
 `jsoninp` | Input json dictionary. Used by POST, PUT method to input request paramters
 
 The restapis  and thier corresponding paramaters used by the cnos_telemetry role is given below.
+
 urlpath | method |  Description
 ---  |  --- | --- 
 `/nos/api/cfg/telemetry/bst/feature` | PUT | configures  the bst feature for the telemetry report
