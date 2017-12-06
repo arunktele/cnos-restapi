@@ -40,7 +40,7 @@ The syntax of *main.yml* file for variables is the following:
 
 You will need to replace the `<value>` field with the value that suits your topology. The `<template variable>` fields are taken from the template and it is recommended that you leave them unchanged.
 
-###Variables for cnos_restapi in context of cnos telemetry configuration
+### Variables for cnos_restapi in context of cnos telemetry configuration
 
 Variable | Description
 --- | ---
@@ -58,7 +58,7 @@ urlpath | method |  Description
 /nos/api/info/telemetry/bst/congestion-drop-counters | POST | configure BST congestion drop counters report
 
 
-####jsoninp parameter for the /nos/api/cfg/telemetry/bst/feature  restapi
+#### jsoninp parameter for the /nos/api/cfg/telemetry/bst/feature  restapi
 Variable | values | Description
 --- | --- | ---
 bst-enable | 1: Enable BST feature, 0: Disable BST feature | Determines if the BST feature should be active or not  
@@ -69,7 +69,7 @@ trigger-rate-limit-interval | 0, 10-600 | interval during which the number of tr
 send-snapshot-on-trigger | 1: trigger-report contains buffer statistics for all configured realms 0: trigger-report contains buffer statistics  only for the statistic/ counter for which the trigger was raised.|  Determines whether the Agent should send a complete buffer statistics report for all configured realms to the collector
 async-full-report | 1: enable full report, 0: disable full report | BST feature asynchronously sends full BST reports to the collector
 
-####jsoninp parameters for the /nos/api/cfg/telemetry/bst/tracking restapi
+#### jsoninp parameters for the /nos/api/cfg/telemetry/bst/tracking restapi
 Variable | values | Description 
 --- | --- | ---
 track-egress-port-service-pool | 0: Disable Tracking, 1: Enable Tracking | Tracks egress per-port and per-service pool buffers
@@ -84,7 +84,7 @@ track-ingress-port-priority-group | 0: Disable Tracking, 1: Enable Tracking | Tr
 track-egress-service-pool | 0: Disable Tracking, 1: Enable Tracking | Tracks per egress service pool buffers
 track-device | 0: Disable Tracking, 1: Enable Tracking | Tracks per device buffers
 
-####jsoninp parameter for the /nos/api/cfg/telemetry/bst/threshold restapi
+#### jsoninp parameter for the /nos/api/cfg/telemetry/bst/threshold restapi
 
 The jsoninp comprises od realm, index1/index1 and index2, threshold parameter.
 
@@ -112,7 +112,7 @@ service-pool | integer(0-1) | Service pool
 priority-group | integer (0-7 ) Priority group
 interface | string | Physical port interface of the device
  
-####jsoninp parameters for the /nos/api/info/telemetry/bst/congestion-drop-counters restapi
+#### jsoninp parameters for the /nos/api/info/telemetry/bst/congestion-drop-counters restapi
 
 The elements of the jsoninp consist of request-type, collection-interval and request-param
 Variable | values | Description 
@@ -129,7 +129,7 @@ ifname-list | list | List of interfaces
 queue-type | 'ucast': unicast queue, 'mcast': multicast queue, 'all' : Both unicast and multicast queue
 queue-list | list of queues | list of queue ids
 
-###The cnos_template used by the cnos_telemetry role is given below
+### cnos_template used by the cnos_telemetry role
 
 The following is the contents of the common telemetry template
 feature telemetry
