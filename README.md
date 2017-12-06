@@ -79,46 +79,43 @@ On successful execution, the method returns an string with the following message
 
 Upon any failure, the method returns an error display string. 
 
-###Python Script to generate telemetry roles based on user input
+### Python Script to generate telemetry roles based on user input
 
 The python script *tlmreport.py* creates telemetry roles based on user input. It creates commands, results, template, tasks and vars sub-directory, populating the tasks and the variable in the tasks and variable directory respectively. 
 
 The script is executed using the python.
 "python tlmreport.py"
 
-####User input Description
+#### User input Description
 
-   1. rolename
-      The script prompts user to enter the role . "Enter the rolename: "
-      A directory is created with the user entered string. If the user enters myrole. myrole directory is created in the current 
-      directory where this script is running. Further commands, results, template, tasks and vars sub-directory are created in this 
+##### rolename
+      The ansible rolename used by the playbook. A directory is created with the rolename with the commands, results, template, tasks 
+      and vars sub-directory. 
       directory.
-   2. Controller IP
-      The IP address of the controller which receives the telemetry data from the switch. This is a string which
-      takes IP address in IPV4 or IPV6 form.
-   3. Controller Port
-      The controller TCP listening port that receives the telemetry data from the switch. This is a number
-   4. Controller Vrf
+##### Controller IP
+      The IP address of the controller which receives the telemetry data from the switch. 
+##### Controller Port
+      The controller TCP listening port that receives the telemetry data from the switch. 
+##### Controller Vrf
       The vrf of the configured IP address. This is either management or default
-   5. Heart beat interval 
+##### Heart beat interval 
       The switch sends heartbeat to the configured controller every few seconds. The heartebeat interval is configured by this    
-      parameter.
-      The range is between 1 and 600.
-   6. Report type 
+      parameter. The range is between 1 and 600.
+##### Report type 
       The type of telemetry report.
       1 - Predictive Congestion Report 
       2 - Congestion_Detection
       3 - Capacity_Planning
-    6.1 Predictive Congestion Report
-         This selection sets thresholds on certain realms. On hitting the configured threshold, the switch sends reports to the
-         controller. 
+  
+  Report Type | Description
+  --- | ---
+  Predictive Congestion Report | This selection sets thresholds on certain realms. On hitting the configured threshold, the switch sends reports to the controller. 
       a) Trigger Rate Interval 
          This is the interval when these threshold reports are sent to the controller from the switch.
       b) Realm and thier thresholds 
          This is realms that use choose to configure the threshold. The script request user to enter the indexes and the threshold 
          values for the configured realm.
-     6.2 Congestion_Detection
-        This selection configures congestion detection reports periodically. There are four types of congestion reports supported
+ Congestion_Detection | This selection configures congestion detection reports periodically. There are four types of congestion reports supported
         a) top-drops
            Enter this selection to get the ports experiencing maximum congestion.
            The number of ports and the periodicity of the report is further required as input.
@@ -130,9 +127,7 @@ The script is executed using the python.
            The number of port queues, the periodicity of the report and queue-type are further requested as input.            
         d) port-queue-drops
            Enter this selection to get the port queues specific congestion. The list of interfaces, type of queue, periodicity and queue            list is further required as input.
-     6.3 Capacity Planning
-         This selection configures a periodic report of the current realms buffer count. The periodicity of the report is further given 
-         as input.
+ Capacity Planning | This selection configures a periodic report of the current realms buffer count. The periodicity of the report is further given as input.
          
 ### Role Deployment
  Copy the role directory contents to the ansible role directory path. 
