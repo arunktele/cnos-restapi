@@ -41,18 +41,52 @@ description:
      Lenovo CNOS switches. "
 
 options:
+    outputfile:
+        description:
+            - This specifies the file path to which the output of each command execution is persisted.
+             Response from the device saved here. Usually the location is the results folder.
+             But your user can choose which ever path he has write permission.
+        required: true
+        default: null
+        choices: []
+    host:
+        description:
+            - This is the variable which used to look into /etc/ansible/hosts file so that device IP addresses
+             on which this template has to be applied is identified. Usually we specify the ansible keyword {{ inventory_hostname }}
+             which we specify in the playbook which is an abstraction to the group of
+             network elements that need to be configured.     
+        required: true
+        default: null
+        choices: []
+    username:
+        description:
+            - Configures the username to use to authenticate the connection to the remote device. The value of
+             username is used to authenticate the SSH session. The value has to come from inventory file ideally,
+             you can even enter it as variable.
+         required: true
+         default: null
+         choices: []
+    password:
+         description:
+             - Configures the password to use to authenticate the connection to the remote device.
+              The value of password is used to authenticate the SSH session.The value has to come from inventory file ideally,
+              you can even enter it as variable.
+         required: true
+         default: null
+         choices: []
     use_ssl:
         description:
             - Transport layer used by the RESTAPI
-               - http  plaintext communication over port 8090
-               - https secured encrypted comminication
+               - False  plaintext communication over port 8090
+               - True secured encrypted comminication over standard https port 443
         type: bool
-        default: true    
+        default: true
+        choice: [True, False]
     urlpath:
         description:
             - URL Path of the RESTAPI
         required: true
-        default: Null
+        default: null
     method:
         description:
             - The HTTP method of the request
@@ -60,13 +94,14 @@ options:
                  - POST is typically used for creating/querying objects
                  - PUT is typically used for modifying objects
         required: true
-        default: Null
+        default: null
+        choice: [GET, PUT, POST]
     jsoninp:
         description:
             - input json dictionary
                  - Used by POST, PUT method to input request paramters
         required: false
-        default: Null
+        default: null
 author:
     - Arun Kumar (@arunktele)
 '''
