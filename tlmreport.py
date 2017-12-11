@@ -13,7 +13,7 @@ tasks = tasks + "- name: Applying CLI commands on Switches\n"
 tasks = tasks + "  cnos_template: host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} deviceType={{ hostvars[inventory_hostname]['deviceType']}} commandfile=./commands/cnos_tlm_{{ inventory_hostname }}_commands.txt outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt\n"
 tasks = tasks + "  with_items: \"{{cnos_tlm_common_template_data}}\"\n"
 tasks = tasks + "- name: PUT BST feature\n"
-tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  transport='{{item.transport}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
+tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  use_ssl='{{item.use_ssl}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
 tasks = tasks + "  with_items: \"{{cnos_tlm_bst_feature_data}}\"\n"
 
 def createdirifpresent(DirPath):
@@ -72,14 +72,14 @@ if __name__ == '__main__':
    if (ReportType == '3'):
        collectinterval = raw_input("Enter the periodic report interval in seconds(10-600): ")
        vars = vars + "cnos_tlm_bst_feature_data:\n"
-       vars = vars + "  - { transport: https, urlpath: /nos/api/cfg/telemetry/bst/feature, method: PUT, "
+       vars = vars + "  - { use_ssl: True, urlpath: /nos/api/cfg/telemetry/bst/feature, method: PUT, "
        vars = vars + "jsoninp: '{\"bst-enable\" : 1, \"send-async-reports\": 1,"
        vars = vars + "\"trigger-rate-limit\": 1, \"trigger-rate-limit-interval\": 10" 
        vars = vars + ", \"send-snapshot-on-trigger\": 0"
        vars = vars + ", \"collection-interval\": " + collectinterval
        vars = vars + ", \"async-full-report\": 1}'}\n" 
        vars = vars + "cnos_tlm_bst_tk_data:\n"
-       vars = vars + "  - { transport: https, urlpath: /nos/api/cfg/telemetry/bst/tracking,"
+       vars = vars + "  - { use_ssl: True, urlpath: /nos/api/cfg/telemetry/bst/tracking,"
        vars = vars + " method: PUT, jsoninp: '{\"track-egress-port-service-pool\": 1," 
        vars = vars + "\"track-egress-uc-queue\": 1, \"track-egress-rqe-queue\": 1, \"track-egress-cpu-queue\": 1,"
        vars = vars + "\"track-ingress-port-service-pool\":1, \"track-ingress-service-pool\": 1, \"track-egress-mc-queue\": 1,"
@@ -99,60 +99,60 @@ if __name__ == '__main__':
           count = raw_input("Number of ports per report: ")
           interval = raw_input("Periodic interval  of the report in seconds(10-600): ")
           vars = vars + "cnos_tlm_bst_cgsn_data1:\n"
-          vars = vars + "  - { transport: https, urlpath: /nos/api/info/telemetry/bst/congestion-drop-counters,"
+          vars = vars + "  - { use_ssl: True, urlpath: /nos/api/info/telemetry/bst/congestion-drop-counters,"
           vars = vars + " method: POST, jsoninp: '{ \"req-id\" : 2000, \"request-type\" : \"top-drops\","
-       vars = vars + " \"request-params\": { \"count\": " + count + " } , \"collection-interval\": "
-       vars = vars + interval + "}'}\n"  
-       tasks = tasks + "- name: POST BST top-drops cgsn report\n"
-       tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  use_ssl='{{item.use_ssl}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
-       tasks = tasks + "  with_items: \"{{cnos_tlm_bst_cgsn_data1}}\"\n"
-   elif (rpt == '2'):
-       vars = vars + "cnos_tlm_bst_cgsn_data2:\n"
-       inp = raw_input("Interface List(/All/InterfaceName seperated by comma): ")
-       interval = raw_input("Periodic interval  of the report in seconds(10-6000: ")
-       intstr = inp_to_intflist(inp)
-       vars = vars + "  - { transport: https, urlpath: /nos/api/info/telemetry/bst/congestion-drop-counters,"
-       vars = vars + " method: POST, jsoninp: '{ \"req-id\" : 3000, \"request-type\" : \"port-drops\","
-       vars = vars + " \"request-params\": { \"interface-list\": " + intstr + " }, \"collection-interval\": "
-       vars = vars + interval + "}'}\n"  
-       tasks = tasks + "- name: POST BST port-drops cgsn report\n"
-       tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  use_ssl='{{item.use_ssl}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
-       tasks = tasks + "  with_items: \"{{cnos_tlm_bst_cgsn_data2}}\"\n"
-   elif (rpt == '3'):
-       vars = vars + "cnos_tlm_bst_cgsn_data3:\n"
-       count = raw_input("Number of ports queues per report: ")
-       interval = raw_input("Periodic interval of the report in seconds(10-600): ")
-       queueType = raw_input("Queue Type(mcast/ucast/all): ")
-       vars = vars + "  - { transport: https, urlpath: /nos/api/info/telemetry/bst/congestion-drop-counters,"
-       vars = vars + " method: POST, jsoninp: '{ \"req-id\" : 4000, \"request-type\" : \"top-port-queue-drops\","
-       vars = vars + " \"request-params\": { \"queue-type\": \"" + queueType + "\" "
-       vars = vars + ", \"count\": " + count + " }, \"collection-interval\": "
-       vars = vars + interval + "}'}\n"  
-       tasks = tasks + "- name: POST BST top-drops cgsn report\n"
-       tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  use_ssl='{{item.use_ssl}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
-       tasks = tasks + "  with_items: \"{{cnos_tlm_bst_cgsn_data3}}\"\n"
-   elif (rpt == '4'):
-       vars = vars + "cnos_tlm_bst_cgsn_data4:\n"
-       intflist = raw_input("Interface List(/All/InterfaceName separated by comma): ")
-       interval = raw_input("Periodic interval of the report in seconds(10-600): ")
-       queueType = raw_input("Queue Type(mcast/ucast/all): ")
-       queueListstr = raw_input("Queue List (number seperated by comma): ")
-       intstr = inp_to_intflist(intflist)
-       queueList = qliststr(queueListstr)
-       vars = vars + "  - { transport: https, urlpath: /nos/api/info/telemetry/bst/congestion-drop-counters,"
-       vars = vars + " method: POST, jsoninp: '{ \"req-id\" : 5000, \"request-type\" : \"port-queue-drops\","
-       vars = vars + " \"request-params\": { \"interface-list\": " + intstr + " , \"queue-type\": \"" + queueType + "\" "
-       vars = vars + ", \"queue-list\": " + queueList + " }, \"collection-interval\": "
-       vars = vars + interval + "}'}\n"  
-       tasks = tasks + "- name: POST BST top-drops cgsn report\n"
-       tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  use_ssl='{{item.use_ssl}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
-       tasks = tasks + "  with_items: \"{{cnos_tlm_bst_cgsn_data4}}\"\n"
-       vars = vars + "cnos_tlm_bst_feature_data:\n"
-       vars = vars + "  - { transport: https, urlpath: /nos/api/cfg/telemetry/bst/feature, method: PUT, "
-       vars = vars + "jsoninp: '{\"bst-enable\" : 1,\"collection-interval\": 0, \"send-async-reports\": 0,"
-       vars = vars + "\"trigger-rate-limit\": 1, \"trigger-rate-limit-interval\": 10" 
-       vars = vars + ", \"send-snapshot-on-trigger\": 0"
-       vars = vars + ", \"async-full-report\": 0}'}\n" 
+          vars = vars + " \"request-params\": { \"count\": " + count + " } , \"collection-interval\": "
+          vars = vars + interval + "}'}\n"  
+          tasks = tasks + "- name: POST BST top-drops cgsn report\n"
+          tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  use_ssl='{{item.use_ssl}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
+          tasks = tasks + "  with_items: \"{{cnos_tlm_bst_cgsn_data1}}\"\n"
+       elif (rpt == '2'):
+          vars = vars + "cnos_tlm_bst_cgsn_data2:\n"
+          inp = raw_input("Interface List(/All/InterfaceName seperated by comma): ")
+          interval = raw_input("Periodic interval  of the report in seconds(10-6000: ")
+          intstr = inp_to_intflist(inp)
+          vars = vars + "  - { use_ssl: True, urlpath: /nos/api/info/telemetry/bst/congestion-drop-counters,"
+          vars = vars + " method: POST, jsoninp: '{ \"req-id\" : 3000, \"request-type\" : \"port-drops\","
+          vars = vars + " \"request-params\": { \"interface-list\": " + intstr + " }, \"collection-interval\": "
+          vars = vars + interval + "}'}\n"  
+          tasks = tasks + "- name: POST BST port-drops cgsn report\n"
+          tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  use_ssl='{{item.use_ssl}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
+          tasks = tasks + "  with_items: \"{{cnos_tlm_bst_cgsn_data2}}\"\n"
+       elif (rpt == '3'):
+          vars = vars + "cnos_tlm_bst_cgsn_data3:\n"
+          count = raw_input("Number of ports queues per report: ")
+          interval = raw_input("Periodic interval of the report in seconds(10-600): ")
+          queueType = raw_input("Queue Type(mcast/ucast/all): ")
+          vars = vars + "  - { use_ssl: True, urlpath: /nos/api/info/telemetry/bst/congestion-drop-counters,"
+          vars = vars + " method: POST, jsoninp: '{ \"req-id\" : 4000, \"request-type\" : \"top-port-queue-drops\","
+          vars = vars + " \"request-params\": { \"queue-type\": \"" + queueType + "\" "
+          vars = vars + ", \"count\": " + count + " }, \"collection-interval\": "
+          vars = vars + interval + "}'}\n"  
+          tasks = tasks + "- name: POST BST top-drops cgsn report\n"
+          tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  use_ssl='{{item.use_ssl}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
+          tasks = tasks + "  with_items: \"{{cnos_tlm_bst_cgsn_data3}}\"\n"
+       elif (rpt == '4'):
+          vars = vars + "cnos_tlm_bst_cgsn_data4:\n"
+          intflist = raw_input("Interface List(/All/InterfaceName separated by comma): ")
+          interval = raw_input("Periodic interval of the report in seconds(10-600): ")
+          queueType = raw_input("Queue Type(mcast/ucast/all): ")
+          queueListstr = raw_input("Queue List (number seperated by comma): ")
+          intstr = inp_to_intflist(intflist)
+          queueList = qliststr(queueListstr)
+          vars = vars + "  - { use_ssl: True, urlpath: /nos/api/info/telemetry/bst/congestion-drop-counters,"
+          vars = vars + " method: POST, jsoninp: '{ \"req-id\" : 5000, \"request-type\" : \"port-queue-drops\","
+          vars = vars + " \"request-params\": { \"interface-list\": " + intstr + " , \"queue-type\": \"" + queueType + "\" "
+          vars = vars + ", \"queue-list\": " + queueList + " }, \"collection-interval\": "
+          vars = vars + interval + "}'}\n"  
+          tasks = tasks + "- name: POST BST top-drops cgsn report\n"
+          tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  use_ssl='{{item.use_ssl}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
+          tasks = tasks + "  with_items: \"{{cnos_tlm_bst_cgsn_data4}}\"\n"
+          vars = vars + "cnos_tlm_bst_feature_data:\n"
+          vars = vars + "  - { use_ssl: True, urlpath: /nos/api/cfg/telemetry/bst/feature, method: PUT, "
+          vars = vars + "jsoninp: '{\"bst-enable\" : 1,\"collection-interval\": 0, \"send-async-reports\": 0,"
+          vars = vars + "\"trigger-rate-limit\": 1, \"trigger-rate-limit-interval\": 10" 
+          vars = vars + ", \"send-snapshot-on-trigger\": 0"
+          vars = vars + ", \"async-full-report\": 0}'}\n" 
    elif (ReportType == '1'):
        TrigRateInt = raw_input('Enter the Trigger Rate Limit Interval:') 
        Snapshot = raw_input('Send All Realms in Report(Y/N):')  
@@ -168,42 +168,42 @@ if __name__ == '__main__':
                print "Invalid Realm\n"
                Realm = None
        if (Realm == 'Device'):
-          Threshold = raw_input("Enter Threshold for Device Realm:")
+          Threshold = raw_input("Enter Threshold for Device Realm(1-100):")
        elif (Realm == 'ISP'):
-          ServicePool = raw_input("Enter Service Pool:")
-          Threshold = raw_input("Enter um-share Threshold for the above Service Pool:")
+          ServicePool = raw_input("Enter Service Pool (0-1):")
+          Threshold = raw_input("Enter um-share Threshold for the above Service Pool(1-100):")
        elif (Realm == 'IPPG'):
           IntfName = raw_input("Enter Interface Name:")
           PGrp = raw_input("Enter Priority Group:")
-          Threshold = raw_input("Enter um-share Threshold for the above Priority group and port :")
+          Threshold = raw_input("Enter um-share Threshold for the above Priority group and port(1-100) :")
        elif (Realm == 'IPSP'):
           IntfName = raw_input("Enter Interface Name:")
           ServicePool = raw_input("Enter Service Pool:")
-          Threshold = raw_input("Enter um-share Threshold for the above service pool and port :")
+          Threshold = raw_input("Enter um-share Threshold for the above service pool and port (1-100):")
        elif (Realm == 'ESP'):
           ServicePool = raw_input("Enter Service Pool:")
-          Threshold = raw_input("Enter um-share Threshold for the above Service Pool:")
-          mcThreshold = raw_input("Enter mc-share Threshold for the above Service Pool:")
+          Threshold = raw_input("Enter um-share Threshold for the above Service Pool(1-100):")
+          mcThreshold = raw_input("Enter mc-share Threshold for the above Service Pool(1-100):")
        elif (Realm == 'EPSP'):
           IntfName = raw_input("Enter Interface Name:")
           ServicePool = raw_input("Enter Service Pool:")
-          ucThreshold = raw_input("Enter uc-share Threshold for the above service pool and port :")
-          Threshold = raw_input("Enter um-share Threshold for the above service pool and port :")
+          ucThreshold = raw_input("Enter uc-share Threshold for the above service pool and port (1-100):")
+          Threshold = raw_input("Enter um-share Threshold for the above service pool and port (1-100):")
        elif (Realm == 'EUCQ'):
           ucq = raw_input("Enter UC Queue:")
-          ucThreshold = raw_input("Enter the Threshold for the above UC Queue:")
+          ucThreshold = raw_input("Enter the Threshold for the above UC Queue(1-100):")
        elif (Realm == 'EMCQ'):
-          mcq = raw_input("Enter UC Queue:")
-          mcThreshold = raw_input("Enter the Threshold for the above MC Queue:")
+          mcq = raw_input("Enter MC Queue:")
+          mcThreshold = raw_input("Enter the Threshold for the above MC Queue(1-100):")
        elif (Realm == 'ECPUQ'):
           cpuq = raw_input("Enter CPU Queue:")
-          Threshold = raw_input("Enter the Threshold for the above CPU Queue:")
+          Threshold = raw_input("Enter the Threshold for the above CPU Queue(1-100):")
        elif (Realm == 'ERQEQ'):
           rqeq = raw_input("Enter RQE Queue:")
-          Threshold = raw_input("Enter the Threshold for the above RQE Queue:")
+          Threshold = raw_input("Enter the Threshold for the above RQE Queue(1-100):")
    
        vars = vars + "cnos_tlm_bst_feature_data:\n"
-       vars = vars + "  - { transport: https, urlpath: /nos/api/cfg/telemetry/bst/feature, method: PUT, "
+       vars = vars + "  - { use_ssl: True, urlpath: /nos/api/cfg/telemetry/bst/feature, method: PUT, "
        vars = vars + "jsoninp: '{\"bst-enable\" : 1,\"collection-interval\": 0, \"send-async-reports\": 0,"
        vars = vars + "\"trigger-rate-limit\": 1, \"trigger-rate-limit-interval\": " + TrigRateInt
        if (Snapshot == 'Y'):
@@ -212,14 +212,14 @@ if __name__ == '__main__':
            vars = vars + ", \"send-snapshot-on-trigger\": 0"
        vars = vars + ", \"async-full-report\": 0}'}\n" 
        vars = vars + "cnos_tlm_bst_tk_data:\n"
-       vars = vars + "  - { transport: https, urlpath: /nos/api/cfg/telemetry/bst/tracking,"
+       vars = vars + "  - { use_ssl: True, urlpath: /nos/api/cfg/telemetry/bst/tracking,"
        vars = vars + " method: PUT, jsoninp: '{\"track-egress-port-service-pool\": 1," 
        vars = vars + "\"track-egress-uc-queue\": 1, \"track-egress-rqe-queue\": 1, \"track-egress-cpu-queue\": 1,"
        vars = vars + "\"track-ingress-port-service-pool\":1, \"track-ingress-service-pool\": 1, \"track-egress-mc-queue\": 1,"
        vars = vars + "\"track-peak-stats\": 0, \"track-ingress-port-priority-group\": 1,"
        vars = vars + "\"track-egress-service-pool\": 1, \"track-device\": 1}'}\n" 
        vars = vars + "cnos_tlm_bst_threshd_data:\n"
-       vars = vars + "  - { transport: https, urlpath: /nos/api/cfg/telemetry/bst/threshold, method: PUT, jsoninp: '{"
+       vars = vars + "  - { use_ssl: True, urlpath: /nos/api/cfg/telemetry/bst/threshold, method: PUT, jsoninp: '{"
        if (Realm == 'Device'):
             vars = vars + "\"realm\": \"device\", \"threshold\": " + Threshold
        elif (Realm == 'ISP'):
@@ -242,12 +242,11 @@ if __name__ == '__main__':
             vars = vars + "\"realm\": \"egress-rqe-queue\", \"queue\": " + rqeq + ", \"rqe-threshold\": " + Threshold
        vars = vars + "}'}\n"
        tasks = tasks + "- name: PUT BST tracking\n"
-       tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  transport='{{item.transport}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
+       tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  use_ssl='{{item.use_ssl}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
        tasks = tasks + "  with_items: \"{{cnos_tlm_bst_tk_data}}\"\n"
        tasks = tasks + "- name: PUT BST threshold\n"
-       tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  transport='{{item.transport}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
+       tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  use_ssl='{{item.use_ssl}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
        tasks = tasks + "  with_items: \"{{cnos_tlm_bst_threshd_data}}\"\n"
-   print vars
    file = open(VarsDir + "/main.yml", "w")
    file.write(vars)
    file.close()
