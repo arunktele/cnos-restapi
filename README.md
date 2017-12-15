@@ -20,7 +20,7 @@ Performs restapi operations from a remote server on devices running Lenovo CNOS.
 This module performs restapi operations on a device running CNOS. The Restapi operations retrieve, modify and create resources on the CNOS device. 
 It provides a way to manage CNOS devices remotely from server.
 
-#### Options
+ee#### Options
 
 parameter | required | default | choices | Description
 :------:  | :------: | :------:| ------ | :------:
@@ -57,7 +57,7 @@ The following are examples of using the module cnos_restapi. These are written i
     password: '{{ password }}'
     outputfile: "./results/test_restapi_{{ inventory_hostname }}_output.txt"
     use_ssl: True
-    urlpath: /nos/api/cfg/telemetry/bst/featur
+    urlpath: /nos/api/cfg/telemetry/bst/feature
     method: GET
 
 - name: Fetch BST feature using a JSON string
