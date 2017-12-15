@@ -1,8 +1,8 @@
-# CNOS Restapi Module for support of Lenovo's CNOS-based networking device in Ansible
+# CNOS Restapi Module & Telemetry Role for support of Lenovo's CNOS-based networking devices in Ansible
 
 ## Overview
 
-* Module provide access CNOS Restapi for switch management functions.
+* Module provides access CNOS Restapi for switch management functions.
 * Python Script to generate telemetry roles based on user input
 
 ## Requirements
@@ -17,21 +17,21 @@
 Performs restapi operations from a remote server on devices running Lenovo CNOS.
 
 #### Synopsis
-This module performs restapi operations on a device running CNOS. The Restapi operations retrive, modify and creates resources on the CNOS device. 
+This module performs restapi operations on a device running CNOS. The Restapi operations retrieve, modify and create resources on the CNOS device. 
 It provides a way to manage CNOS devices remotely from server.
 
 #### Options
 
 parameter | required | default | choices | Description
-:------:  | :------: | :------:| ------ | ------
-outputfile|  yes     |  null   |   []   | This specifies the file path to which the output of each command execution is persisted.Response from the device saved here. Usually the location is the results folder. But your user can choose which ever path he has write permission. 
-host      |  yes     |  null   |   []   | This is the variable which used to look into /etc/ansible/hosts file so that device IP addresses on which this template has to be applied is identified. Usually we specify the ansible keyword {{ inventory_hostname }} which we specify in the playbook which is an abstraction to the group of network elements that need to be configured.
-username  |  yes     |  null   |   []   | Configures the username to use to authenticate the connection to the remote device. The value of  username is used to authenticate the REST session. The value has to come from inventory file ideally, you can even enter it as variable.
+:------:  | :------: | :------:| ------ | :------:
+outputfile|  yes     |  null   |   []   | This specifies the file path to which the output of each command execution is persisted. Responses from the device are saved here. Usually the location is the results folder. But your user can choose which ever path he has write permission. 
+host      |  yes     |  null   |   []   | This is the variable which used to look into /etc/ansible/hosts file so that device IP addresses on which this template has to be applied is identified. Usually it specifies the ansible keyword {{ inventory_hostname }} which is specified in the playbook which is an abstraction to the group of network elements that need to be configured.
+username  |  yes     |  null   |   []   | Configures the username to use to authenticate the connection to the remote device. The value of  username is used to authenticate the REST session. The value has to come from inventory file ideally; you can even enter it as variable.
 password  |  yes     |  null   |   []   | Configures the password to use to authenticate the connection to the remote device. The value of password is used to authenticate the REST session.The value has to come from inventory file ideally you can even enter it as variable.
-use_ssl   |  no     |  True   |[True,False]  | Transport layer used by the RESTAPI. False choice  indicates http  plaintext communication over port 8090. True indicates https secured encrypted comminication
+use_ssl   |  no     |  True   |[True,False]  | Transport layer used by the RESTAPI. False value indicates http  plaintext communication over port 8090. True value indicates https secured encrypted communication
 urlpath   |  yes     |  null   |   []         | URL Path of the RESTAPI
 method    |  yes     |  null   |[GET,PUT,POST]| The HTTP method of the request.  GET is typically used for querying objects. POST is typically used for creating/querying objects. PUT is typically used for modifying objects
-jsoninp   |  no     |  null   |   []         | Input json dictionary. Used by POST, PUT method to input request paramters
+jsoninp   |  no     |  null   |   []         | Input JSON dictionary. Used by POST, PUT method to input request parameters
 
 #### Examples
 The following are examples of using the module cnos_restapi. These are written in the main.yml file of the tasks directory. 
@@ -48,7 +48,7 @@ The following are examples of using the module cnos_restapi. These are written i
     jsoninp: '{"collection-interval": 20, "send-async-reports": 1,
              "send-snapshot-on-trigger": 1, "trigger-rate-limit": 1,
               "async-full-report": 0, "trigger-rate-limit-interval": 11,
-              "bst-enable": 1}'
+              "bst-enable": 1
 
 - name: Fetch BST feature using a JSON string
   cnos_restapi:
@@ -57,7 +57,7 @@ The following are examples of using the module cnos_restapi. These are written i
     password: '{{ password }}'
     outputfile: "./results/test_restapi_{{ inventory_hostname }}_output.txt"
     use_ssl: True
-    urlpath: /nos/api/cfg/telemetry/bst/feature
+    urlpath: /nos/api/cfg/telemetry/bst/featur
     method: GET
 
 - name: Fetch BST feature using a JSON string
@@ -73,7 +73,7 @@ The following are examples of using the module cnos_restapi. These are written i
 
 ```
 
-#### Return Values
+M#### Return Values
 On successful execution, the method returns an string with the following message in JSON format: 
 "RESTAPI [GET,PUT,POST]  urlpath is successful"
 
@@ -89,17 +89,17 @@ The script is executed using the python.
 #### User input Description
 
 ##### rolename
-      The ansible rolename used by the playbook. A directory is created with the rolename with the commands, results, template, tasks 
+      The ansible rolename to be used in the playbook. A directory is created with the rolename with the commands, results, template, tasks 
       and vars sub-directory. 
       directory.
 ##### Controller IP
       The IP address of the controller which receives the telemetry data from the switch. 
 ##### Controller Port
-      The controller TCP listening port that receives the telemetry data from the switch. 
+      The controller's TCP listening port that receives the telemetry data from the switch. 
 ##### Controller Vrf
-      The vrf of the configured IP address. This is either management or default
+      The vrf of the configured IP address. This value is either management or default
 ##### Heart beat interval 
-      The switch sends heartbeat to the configured controller every few seconds. The heartebeat interval is configured by this    
+      The switch sends a heartbeat to the configured controller every few seconds. The heartbeat interval is configured by this    
       parameter. The range is between 1 and 600.
 ##### Report type 
       The type of telemetry report.
@@ -113,8 +113,8 @@ The script is executed using the python.
  Congestion_Detection | This selection configures congestion detection reports periodically. There are four types of congestion reports supported. *top-drops* reports the ports experiencing maximum congestion. The number of ports and the periodicity of the report is further required as input for *top-drop* report. *port-drops* reports the port specific congestion.The list of interfaces and the periodicity of the report is further required as input for *port-drop* report. *top-port-queue-drops* reports the port queues experiencing maximum congestion. The number of port queues, the periodicity of the report and queue-type are further requested as input for *top-port-queue-drops* report. *port-queue-drops* reports port queues specific congestion. The list of interfaces, type of queue, periodicity and queue list is further required as input for *port-queue-drops* report.
  Capacity Planning | This selection configures a periodic report of the current realms buffer count. The periodicity of the report is further given as input.
          
-### Role Deployment
- Copy the role directory contents to the ansible role directory path. 
+### Module and Role Deployment
+ Download the zip or tar.gz file containing and unzip into local directory.
  
 ## License
 
