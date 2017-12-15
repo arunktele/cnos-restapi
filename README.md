@@ -20,7 +20,7 @@ Performs restapi operations from a remote server on devices running Lenovo CNOS.
 This module performs restapi operations on a device running CNOS. The Restapi operations retrieve, modify and create resources on the CNOS device. 
 It provides a way to manage CNOS devices remotely from server.
 
-ee#### Options
+#### Options
 
 parameter | required | default | choices | Description
 :------:  | :------: | :------:| ------ | :------:
@@ -91,7 +91,6 @@ The script is executed using the python.
 ##### rolename
       The ansible rolename to be used in the playbook. A directory is created with the rolename with the commands, results, template, tasks 
       and vars sub-directory. 
-      directory.
 ##### Controller IP
       The IP address of the controller which receives the telemetry data from the switch. 
 ##### Controller Port
