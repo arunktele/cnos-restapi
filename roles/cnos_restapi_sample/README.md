@@ -82,7 +82,7 @@ ansible-playbook cnos_restapi_sample.yml -vvv
 `-vvv` is an optional verbos command that helps identify what is happening during playbook execution. The playbook for each role is located in the main directory of the solution.
 
 ```
-- name: Module to back up configuration
+- name: Module to configure the telemetry report using CNOS restapi's
    hosts: cnos_restapi_sample
    gather_facts: no
    connection: local
