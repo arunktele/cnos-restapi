@@ -80,7 +80,7 @@ options:
                - False  plaintext communication over port 8090
                - True secured encrypted comminication over standard https port 443
         type: bool
-        default: true
+        default: True
         choice: [True, False]
     urlpath:
         description:
@@ -114,7 +114,7 @@ EXAMPLES = '''
     username: '{{ username }}'
     password: '{{ password }}'
     outputfile: "./results/test_restapi_{{ inventory_hostname }}_output.txt"
-    transport: https
+    use_ssl: True
     urlpath: /nos/api/cfg/telemetry/bst/feature
     method: PUT
     jsoninp: '{"collection-interval": 20, "send-async-reports": 1,
@@ -128,7 +128,7 @@ EXAMPLES = '''
     username: '{{ username }}'
     password: '{{ password }}'
     outputfile: "./results/test_restapi_{{ inventory_hostname }}_output.txt"
-    transport: https
+    use_ssl: True
     urlpath: /nos/api/cfg/telemetry/bst/feature
     method: GET
 
@@ -138,7 +138,7 @@ EXAMPLES = '''
     username: '{{ username }}'
     password: '{{ password }}'
     outputfile: "./results/test_restapi_{{ inventory_hostname }}_output.txt"
-    transport: https
+    use_ssl: True
     urlpath: /nos/api/info/telemetry/bst/congestion-drop-counters
     method: POST
     jsoninp: '{"req-id" : 1, "request-type" : "port-drops", "request-params": {"interface-list": ["Ethernet1/1", "Ethernet1/2", "Ethernet1/3"]}}'
