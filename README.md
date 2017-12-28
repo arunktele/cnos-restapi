@@ -84,7 +84,8 @@ Upon any failure, the method returns an error display string.
 
 The python script *tlmreport.py* creates telemetry roles based on user input. It creates commands, results, template, tasks and vars sub-directory, populating the tasks and the variable in the tasks and variable directory respectively. 
 
-The script is executed using the python.
+The script is executed with the following command syntax.
+
 "python tlmreport.py"
 
 #### User input Description
