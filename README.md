@@ -23,7 +23,7 @@ It provides a way to manage CNOS devices remotely from server.
 #### Options
 
 parameter | required | default | choices | Description
-:------:  | :------: | :------:| ------ | :------:
+:------:  | :------: | :------:| ------ | :------
 outputfile|  yes     |  null   |   []   | This specifies the file path to which the output of each command execution is persisted. Responses from the device are saved here. Usually the location is the results folder. But your user can choose which ever path he has write permission. 
 host      |  yes     |  null   |   []   | This is the variable which used to look into /etc/ansible/hosts file so that device IP addresses on which this template has to be applied is identified. Usually it specifies the ansible keyword {{ inventory_hostname }} which is specified in the playbook which is an abstraction to the group of network elements that need to be configured.
 username  |  yes     |  null   |   []   | Configures the username to use to authenticate the connection to the remote device. The value of  username is used to authenticate the REST session. The value has to come from inventory file ideally; you can even enter it as variable.
@@ -47,7 +47,8 @@ The following are examples of using the module cnos_restapi. These are written i
     method: PUT
     jsoninp: '{"collection-interval": 20, "send-async-reports": 1,
              "send-snapshot-on-trigger": 1, "trigger-rate-limit": 1,
-              "async-full-report": 0, "trigger-rate-limit-interval": 11,              "bst-enable": 1
+              "async-full-report": 0, "trigger-rate-limit-interval": 11,
+              "bst-enable": 1}
 
 - name: Fetch BST feature using a JSON string
   cnos_restapi:
@@ -68,7 +69,8 @@ The following are examples of using the module cnos_restapi. These are written i
     use_ssl: True
     urlpath: /nos/api/info/telemetry/bst/congestion-drop-counters
     method: POST
-    jsoninp: '{"req-id" : 1, "request-type" : "port-drops", "request-params": {"interface-list": ["Ethernet1/1", "Ethernet1/2", "Ethernet1/3"]}}'
+    jsoninp: '{"req-id" : 1, "request-type" : "port-drops", 
+               "request-params": {"interface-list": ["Ethernet1/1", "Ethernet1/2", "Ethernet1/3"]}}'
 
 ```
 
@@ -82,7 +84,8 @@ Upon any failure, the method returns an error display string.
 
 The python script *tlmreport.py* creates telemetry roles based on user input. It creates commands, results, template, tasks and vars sub-directory, populating the tasks and the variable in the tasks and variable directory respectively. 
 
-The script is executed using the python.
+The script is executed with the following command syntax.
+
 "python tlmreport.py"
 
 #### User input Description
