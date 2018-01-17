@@ -140,10 +140,11 @@ queue-list | list of queues | list of queue ids
 ### cnos_template used by the cnos_telemetry role
 
 The following is the contents of the common telemetry template
+```
 feature telemetry
 telemetry controller ip {{item.controllerip}} port {{item.controllerport}} vrf {{item.vrf}}
 telemetry heartbeat enabled interval {{item.hbinterval}}
-
+```
 If the user like to disable hearbeat the template to disable hearbeat is given below
 feature telemetry
 telemetry controller ip {{item.controllerip}} port {{item.controllerport}} vrf {{item.vrf}}
