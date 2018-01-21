@@ -181,7 +181,8 @@ def configure_capacity_planning(TaskDir, VarsDir, append):
    writeoutput(vars, (VarsDir + "/main.yml"), append)
    writeoutput(tasks, (TasksDir + "/main.yml"), append)
 
-def configure_congestion_detection(TaskDir, VarsDir, append):
+
+def configure_congestion_report(TaskDir, VarsDir, append, num):
    print(" The following are the supported congestion report:")
    print(" 1 : Top-port Drops [The top ports that experience highest congestion]")
    print(" 2 : Port Drops [The specified  ports congestion drop  ]")
@@ -189,19 +190,20 @@ def configure_congestion_detection(TaskDir, VarsDir, append):
    print(" 4 : Port Queue Drops [The specified  port queue drops]")
    rpt = raw_input("Select the Report(1/2/3/4): ")
    if (rpt == '1'):
-      count = userinput_integer("Number of ports per report: ", 1, 20)
+      count = userinput_integer("Number of ports per report(1-30): ", 1, 30)
       interval = userinput_integer("Periodic interval  of the report in seconds(10-600): ", 10, 600)
-      vars = "cnos_tlm_bst_cgsn_data1:\n"
+      vars = "cnos_tlm_bst_cgsn_data1" + str(num) + ":\n"
       vars = vars + "  - { use_ssl: True, urlpath: /nos/api/info/telemetry/bst/congestion-drop-counters,"
       vars = vars + " method: POST, jsoninp: '{ \"req-id\" : 2000, \"request-type\" : \"top-drops\","
       vars = vars + " \"request-params\": { \"count\": " + count + " } , \"collection-interval\": "
       vars = vars + interval + "}'}\n"  
       tasks = "- name: POST BST top-drops cgsn report\n"
       tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  use_ssl='{{item.use_ssl}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
-      tasks = tasks + "  with_items: \"{{cnos_tlm_bst_cgsn_data1}}\"\n"
+      tasks = tasks + "  with_items: \"{{cnos_tlm_bst_cgsn_data1" + str(num) + "}}\"\n"
    elif (rpt == '2'):
-      vars = "cnos_tlm_bst_cgsn_data2:\n"
-      inp = raw_input("Interface List(AllUP/InterfaceName seperated by comma): ")
+      vars = "cnos_tlm_bst_cgsn_data2" + str(num) + ":\n"
+      inp = raw_input("Interface List(InterfaceName seperated by comma): ")
+      """
       if inp == "AllUP":
           switch_ip = raw_input("Enter the switch IP(xx.xx.xx.xx):")
           ssl = userinput_string_yn("https connection(Y/N): ") 
@@ -223,6 +225,8 @@ def configure_congestion_detection(TaskDir, VarsDir, append):
           intstr = intstr.replace('\'','\"')
       else:
           intstr = inp_to_intflist(inp)
+      """
+      intstr = inp_to_intflist(inp)
       interval = userinput_integer("Periodic interval  of the report in seconds(10-600): ", 10, 600)
       vars = vars + "  - { use_ssl: True, urlpath: /nos/api/info/telemetry/bst/congestion-drop-counters,"
       vars = vars + " method: POST, jsoninp: '{ \"req-id\" : 3000, \"request-type\" : \"port-drops\","
@@ -230,10 +234,10 @@ def configure_congestion_detection(TaskDir, VarsDir, append):
       vars = vars + interval + "}'}\n" 
       tasks = "- name: POST BST port-drops cgsn report\n"
       tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  use_ssl='{{item.use_ssl}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
-      tasks = tasks + "  with_items: \"{{cnos_tlm_bst_cgsn_data2}}\"\n"
+      tasks = tasks + "  with_items: \"{{cnos_tlm_bst_cgsn_data2" + str(num) + "}}\"\n"
    elif (rpt == '3'):
-      vars = "cnos_tlm_bst_cgsn_data3:\n"
-      count = userinput_integer("Number of ports queues per report: ", 1, 20)
+      vars = "cnos_tlm_bst_cgsn_data3" + str(num) + ":\n"
+      count = userinput_integer("Number of ports queues per report(1-30): ", 1, 30)
       interval = userinput_integer("Periodic interval of the report in seconds(10-600): ", 10, 600)
       queueType = raw_input("Queue Type(mcast/ucast/all): ")
       vars = vars + "  - { use_ssl: True, urlpath: /nos/api/info/telemetry/bst/congestion-drop-counters,"
@@ -241,12 +245,13 @@ def configure_congestion_detection(TaskDir, VarsDir, append):
       vars = vars + " \"request-params\": { \"queue-type\": \"" + queueType + "\" "
       vars = vars + ", \"count\": " + count + " }, \"collection-interval\": "
       vars = vars + interval + "}'}\n"  
-      tasks = tasks + "- name: POST BST top-drops cgsn report\n"
+      tasks = "- name: POST BST top-drops cgsn report\n"
       tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  use_ssl='{{item.use_ssl}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
-      tasks = tasks + "  with_items: \"{{cnos_tlm_bst_cgsn_data3}}\"\n"
+      tasks = tasks + "  with_items: \"{{cnos_tlm_bst_cgsn_data3" + str(num) + "}}\"\n"
    elif (rpt == '4'):
-      vars = "cnos_tlm_bst_cgsn_data4:\n"
-      inp = raw_input("Interface List(AllUP/InterfaceName separated by comma): ")
+      vars = "cnos_tlm_bst_cgsn_data4" + str(num) + ":\n"
+      inp = raw_input("Interface List(InterfaceName separated by comma): ")
+      """
       if inp == "AllUP":
           switch_ip = raw_input("Enter the switch IP(xx.xx.xx.xx):")
           ssl = userinput_string_yn("https connection(Y/N): ") 
@@ -268,6 +273,8 @@ def configure_congestion_detection(TaskDir, VarsDir, append):
           intstr = intstr.replace('\'','\"')
       else:
           intstr = inp_to_intflist(inp)
+      """
+      intstr = inp_to_intflist(inp)
       interval = userinput_integer("Periodic interval of the report in seconds(10-600): ", 10, 600)
       queueType = raw_input("Queue Type(mcast/ucast/all): ")
       queueListstr = raw_input("Queue List (number seperated by comma): ")
@@ -277,17 +284,20 @@ def configure_congestion_detection(TaskDir, VarsDir, append):
       vars = vars + " \"request-params\": { \"interface-list\": " + intstr + " , \"queue-type\": \"" + queueType + "\" "
       vars = vars + ", \"queue-list\": " + queueList + " }, \"collection-interval\": "
       vars = vars + interval + "}'}\n"  
-      tasks = tasks + "- name: POST BST top-drops cgsn report\n"
+      tasks = "- name: POST BST top-drops cgsn report\n"
       tasks = tasks + "  cnos_restapi:  host={{ inventory_hostname }} username={{ hostvars[inventory_hostname]['username']}}  password={{ hostvars[inventory_hostname]['password']}} outputfile=./results/cnos_tlm_{{ inventory_hostname }}_output.txt  use_ssl='{{item.use_ssl}}' urlpath='{{item.urlpath}}' method='{{item.method}}' jsoninp='{{item.jsoninp}}'\n"
-      tasks = tasks + "  with_items: \"{{cnos_tlm_bst_cgsn_data4}}\"\n"
-      vars = vars + "cnos_tlm_bst_feature_data:\n"
-      vars = vars + "  - { use_ssl: True, urlpath: /nos/api/cfg/telemetry/bst/feature, method: PUT, "
-      vars = vars + "jsoninp: '{\"bst-enable\" : 1,\"collection-interval\": 0, \"send-async-reports\": 0,"
-      vars = vars + "\"trigger-rate-limit\": 1, \"trigger-rate-limit-interval\": 10" 
-      vars = vars + ", \"send-snapshot-on-trigger\": 0"
-      vars = vars + ", \"async-full-report\": 0}'}\n" 
+      tasks = tasks + "  with_items: \"{{cnos_tlm_bst_cgsn_data4" + str(num) + "}}\"\n"
    writeoutput(vars, (VarsDir + "/main.yml"), append)
    writeoutput(tasks, (TasksDir + "/main.yml"), append)
+
+def configure_congestion_detection(TaskDir, VarsDir, append):
+   num = 0
+   while True:
+       configure_congestion_report(TasksDir, VarsDir, append, num)
+       option = userinput_string_yn(" Want to configure more congestion reports (Y/N)")
+       num = num + 1
+       if (option == 'N'): 
+            break
 
 def configure_threshold(TasksDir, VarsDir, append, num):
    print("The following Realms are supported in CNOS \n    Device: Device Realm \n       ISP: Ingress Service Pool")
@@ -369,14 +379,14 @@ def configure_pred_congestion(TasksDir, VarsDir, append):
    TrigRateInt = userinput_integer('Enter the Trigger Rate Limit Interval:', 1, 600) 
    Snapshot = userinput_string_yn('Send All Realms in Report(Y/N):')  
 
-   if (Snapshot == 'Y'):
-       vars =  ", \"send-snapshot-on-trigger\": 1"
-   elif (Snapshot == 'N'):
-       vars = ", \"send-snapshot-on-trigger\": 0"
-   vars = vars + "cnos_tlm_bst_feature_data:\n"
+   vars = "cnos_tlm_bst_feature_data:\n"
    vars = vars + "  - { use_ssl: True, urlpath: /nos/api/cfg/telemetry/bst/feature, method: PUT, "
    vars = vars + "jsoninp: '{\"bst-enable\" : 1,\"collection-interval\": 0, \"send-async-reports\": 0,"
    vars = vars + "\"trigger-rate-limit\": 1, \"trigger-rate-limit-interval\": " + TrigRateInt
+   if (Snapshot == 'Y'):
+       vars =  vars + ", \"send-snapshot-on-trigger\": 1"
+   elif (Snapshot == 'N'):
+       vars = vars + ", \"send-snapshot-on-trigger\": 0"
    vars = vars + ", \"async-full-report\": 0}'}\n" 
    vars = vars + "cnos_tlm_bst_tk_data:\n"
    vars = vars + "  - { use_ssl: True, urlpath: /nos/api/cfg/telemetry/bst/tracking,"
